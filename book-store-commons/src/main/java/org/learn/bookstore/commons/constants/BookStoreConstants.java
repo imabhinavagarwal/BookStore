@@ -13,4 +13,6 @@ public interface BookStoreConstants {
 
     String SYSTEM = "SYSTEM";
     String GMT = "GMT";
+
+    String API_V1_PREFIX = "/api/v1";
 }
