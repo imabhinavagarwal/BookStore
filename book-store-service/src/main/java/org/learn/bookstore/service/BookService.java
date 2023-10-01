@@ -1,5 +1,6 @@
 package org.learn.bookstore.service;
 
+import org.learn.bookstore.commons.dto.web.request.AddBookWebRequest;
 import org.learn.bookstore.commons.dto.web.response.BookListWebResponse;
 
 /**
@@ -9,5 +10,7 @@ import org.learn.bookstore.commons.dto.web.response.BookListWebResponse;
  */
 public interface BookService {
 
-    BookListWebResponse getAllBooks(int pageNo, int pageSize);
+    BookListWebResponse getAll(int pageNo, int pageSize);
+
+    void add(AddBookWebRequest webRequest);
 }

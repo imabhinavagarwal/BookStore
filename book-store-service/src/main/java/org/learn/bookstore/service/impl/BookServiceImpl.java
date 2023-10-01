@@ -2,11 +2,14 @@ package org.learn.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.learn.bookstore.commons.dto.PageDTO;
+import org.learn.bookstore.commons.dto.web.request.AddBookWebRequest;
 import org.learn.bookstore.commons.dto.web.response.BookDetailsWebResponse;
 import org.learn.bookstore.commons.dto.web.response.BookListWebResponse;
 import org.learn.bookstore.commons.entity.Book;
 import org.learn.bookstore.commons.entity.Genre;
+import org.learn.bookstore.dao.AuthorRepo;
 import org.learn.bookstore.dao.BookRepo;
 import org.learn.bookstore.dao.GenreRepo;
 import org.learn.bookstore.service.BookService;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -34,9 +38,10 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepo bookRepo;
     private final GenreRepo genreRepo;
+    private final AuthorRepo authorRepo;
 
     @Override
-    public BookListWebResponse getAllBooks(int pageNo, int pageSize) {
+    public BookListWebResponse getAll(int pageNo, int pageSize) {
         if (pageSize < 0)
             return null;
         Map<Long, Genre> genreById = genreRepo.findAll()
@@ -56,8 +61,25 @@ public class BookServiceImpl implements BookService {
                 .setPageSize(pageSize)
                 .setTotalPages(bookPage.getTotalPages())
                 .setTotalElements(bookPage.getTotalElements());
-        return new BookListWebResponse()
-                .setBooks(bookDetails)
-                .setPage(pageDTO);
+        return new BookListWebResponse().setBooks(bookDetails).setPage(pageDTO);
+    }
+
+    @Override
+    public void add(AddBookWebRequest webRequest) {
+        if (!authorRepo.existsById(webRequest.getAuthorId()))
+            throw new RuntimeException("Invalid author info");
+        Book book = new Book();
+        BeanUtils.copyProperties(webRequest, book);
+        String requestGenre = webRequest.getGenre();
+        if (StringUtils.isNotBlank(requestGenre)) {
+            Genre genre = genreRepo.findByNameIgnoreCase(requestGenre);
+            if (Objects.isNull(genre)) {
+                genre = new Genre();
+                genre.setName(requestGenre);
+                genre = genreRepo.save(genre);
+            }
+            book.setGenreId(genre.getId());
+        }
+        bookRepo.save(book);
     }
 }

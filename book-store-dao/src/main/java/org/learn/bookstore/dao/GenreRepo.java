@@ -12,4 +12,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GenreRepo extends JpaRepository<Genre, Long> {
+
+    Genre findByNameIgnoreCase(String name);
 }
