@@ -2,8 +2,12 @@ package org.learn.bookstore.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication(scanBasePackages = {"org.learn.bookstore"})
+@EntityScan(basePackages = {"org.learn.bookstore"})
+@EnableJpaRepositories(basePackages = {"org.learn.bookstore"})
 public class BookStoreApplication {
 
 	public static void main(String[] args) {
