@@ -1,4 +1,4 @@
-package org.learn.bookstore.commons.constants;
+package org.learn.bookstore.commons.constant;
 
 /**
  * @author abhinavagarwal
