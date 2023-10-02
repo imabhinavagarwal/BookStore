@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import static org.learn.bookstore.commons.constants.BookStoreConstants.API_V1_PREFIX;
+import static org.learn.bookstore.commons.constant.BookStoreConstants.API_V1_PREFIX;
 
 /**
  * @author abhinavagarwal

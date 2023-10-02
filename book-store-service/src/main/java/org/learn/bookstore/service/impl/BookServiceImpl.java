@@ -9,6 +9,7 @@ import org.learn.bookstore.commons.dto.web.response.BookDetailsWebResponse;
 import org.learn.bookstore.commons.dto.web.response.BookListWebResponse;
 import org.learn.bookstore.commons.entity.Book;
 import org.learn.bookstore.commons.entity.Genre;
+import org.learn.bookstore.commons.system.StandardSystemException;
 import org.learn.bookstore.dao.AuthorRepo;
 import org.learn.bookstore.dao.BookRepo;
 import org.learn.bookstore.dao.GenreRepo;
@@ -24,6 +25,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static org.learn.bookstore.commons.enums.SystemErrorCode.AUTHOR_NOT_FOUND;
 
 /**
  * @author abhinavagarwal
@@ -67,7 +70,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void add(AddBookWebRequest webRequest) {
         if (!authorRepo.existsById(webRequest.getAuthorId()))
-            throw new RuntimeException("Invalid author info");
+            throw new StandardSystemException("Invalid author info", AUTHOR_NOT_FOUND);
         Book book = new Book();
         BeanUtils.copyProperties(webRequest, book);
         String requestGenre = webRequest.getGenre();
