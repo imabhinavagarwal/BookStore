@@ -10,7 +10,7 @@ import org.learn.bookstore.commons.dto.web.response.BookListWebResponse;
  */
 public interface BookService {
 
-    BookListWebResponse getAll(int pageNo, int pageSize);
+    BookListWebResponse getAll(int pageNo, int pageSize, String searchKey);
 
     void add(AddBookWebRequest webRequest);
 }
