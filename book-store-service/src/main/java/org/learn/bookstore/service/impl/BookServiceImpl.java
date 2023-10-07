@@ -17,6 +17,7 @@ import org.learn.bookstore.service.BookService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -44,13 +45,18 @@ public class BookServiceImpl implements BookService {
     private final AuthorRepo authorRepo;
 
     @Override
-    public BookListWebResponse getAll(int pageNo, int pageSize) {
+    public BookListWebResponse getAll(int pageNo, int pageSize, String searchKey) {
         if (pageSize < 0)
             return null;
         Map<Long, Genre> genreById = genreRepo.findAll()
                 .stream()
                 .collect(Collectors.toMap(Genre::getId, Function.identity()));
-        Page<Book> bookPage = bookRepo.findAll(PageRequest.of(pageNo, pageSize, Sort.by("name").ascending()));
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("name").ascending());
+        Page<Book> bookPage;
+        if (StringUtils.isNotBlank(searchKey))
+            bookPage = bookRepo.findAllByNameLikeIgnoreCase(searchKey, pageable);
+        else
+            bookPage = bookRepo.findAll(pageable);
         List<BookDetailsWebResponse> bookDetails = bookPage.get()
                 .map(book -> {
                     BookDetailsWebResponse bookDetail = new BookDetailsWebResponse();
