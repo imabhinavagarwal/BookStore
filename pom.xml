@@ -80,6 +80,13 @@
                 <optional>true</optional>
             </dependency>
 
+            <!-- Open API (Swagger) -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>2.2.0</version>
+            </dependency>
+
             <!-- Common Utilities and Third Party Libraries -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
